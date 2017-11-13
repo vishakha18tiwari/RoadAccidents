@@ -1,0 +1,45 @@
+#MODEL 1 : It predicts range and value of total number of accidents that will occur in 2016 from the given value of 2009 to 2015 for a particular desired state
+library(ggplot2)
+dataset<-read.csv("C:/Users/HP/Desktop/dataset.csv",sep=',',header=TRUE)
+dataset[is.na(dataset)]<-0
+dataset2<-dataset[2,65:71]
+dataset2<-as.matrix(dataset2)
+dataset2<-as.numeric(dataset2)
+df<-data.frame(year=2009:2015,dataset2)
+ggplot(df,aes(x=year,y=dataset2))+geom_point()+geom_smooth(method="lm",fullrange=T)+xlim(2009,2016)+labs(y="Total number of accidents",title="Prediction of total number of accidents in 2016 in Arunachal Pradesh")
+value.lm<-lm(dataset2~year,data=df)
+new.dat<-data.frame(year=2016)
+x<-predict(value.lm,newdata = new.dat,interval='prediction')
+x<-as.data.frame(x)
+
+#MODEL 2 : It predicts values of total number of accidents which will occur in 2016 due to different means of transportation.
+
+library(ggplot2)
+seq<-c(2,9,16,23,30,37,44)
+predictions<-function()
+{ 
+  Number_of_accident<-NULL
+  for(i in seq){
+    count<-i+6
+    dataset<-read.csv("C:/Users/HP/Desktop/dataset.csv",sep=',',header=TRUE)
+    dataset[is.na(dataset)]<-0
+    dataset2<-dataset[24,i:count]
+    dataset2<-as.matrix(dataset2)
+   dataset2<-as.numeric(dataset2)
+    df<-data.frame(year=2009:2015,dataset2)
+ggplot(df,aes(x=year,y=dataset2))+geom_point()+geom_smooth(method="lm",fullrange=T)+xlim(2009,2016)
+    value.lm<-lm(dataset2~year,data=df)
+    new.dat<-data.frame(year=2016)
+    uv<-predict(value.lm,newdata = new.dat,interval='prediction')
+    uv<-as.data.frame(uv)
+    uv<-uv$fit
+    tmp<-uv
+    Number_of_accident<-rbind(Number_of_accident,tmp)
+   }
+   return(Number_of_accident)
+}
+Predicted_accident<-predictions()
+Predicted_accident<-t(Predicted_accident)
+Transport_means<-c("predestrians","Bicycle","2-wheeler","Auto","Car","Trucks","Buses")
+barplot(Predicted_accident,names.arg=Transport_means,xlab="Transportation_means",ylab="Number_of_accidents",main="Predicted values of total number of accidents by various means of transportation in 2016",col="red")
+
