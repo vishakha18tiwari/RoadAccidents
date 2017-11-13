@@ -1,0 +1,2 @@
+# RoadAccidents
+Roads have now connected almost every village, city, towns. With increase of such facilities, the number of accidents in a particular state has also increased. Thus, it has become important for the government to look forward towards the number of accidents occurring every year. In this project, analyzes has been done to predict  the range for number of accidents by a particular means of transportation. 
